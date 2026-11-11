@@ -324,8 +324,12 @@ function Members() {
                 <>
                   <div className="member-card-top">
                     <div className="member-avatar">
-                      {member.name.charAt(0).toUpperCase()}
-                    </div>
+  <img
+    src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(member.name.trim().toLowerCase())}`}
+    alt={`${member.name} avatar`}
+    loading="lazy"
+  />
+</div>
                     <span className="member-status">
                       <span></span> Active
                     </span>
