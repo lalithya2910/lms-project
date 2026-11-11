@@ -124,14 +124,19 @@ const availableBooks = [
       return `${year}-${month}-${day}`;
     };
 
-    const newTransaction = {
-      id: Date.now(),
-      book,
-      member,
-      date: formatDate(issueDate),
-      dueDate: formatDate(dueDate),
-      status: "Issued"
-    };
+    const selectedBook = availableBooks.find(
+  (item) => item.title === book
+);
+
+const newTransaction = {
+  id: Date.now(),
+  book,
+  member,
+  image: selectedBook.image,
+  date: formatDate(issueDate),
+  dueDate: formatDate(dueDate),
+  status: "Issued"
+};
 
     setTransactions((previous) => [...previous, newTransaction]);
 
@@ -254,11 +259,11 @@ const availableBooks = [
                 onChange={(e) => setBook(e.target.value)}
               >
                 <option value="">Choose a book</option>
-                {availableBooks.map((bookName) => (
-                  <option key={bookName} value={bookName}>
-                    {bookName}
-                  </option>
-                ))}
+                {availableBooks.map((bookItem) => (
+  <option key={bookItem.id} value={bookItem.title}>
+    {bookItem.title}
+  </option>
+))}
               </select>
             </div>
 
