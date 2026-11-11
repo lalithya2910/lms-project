@@ -3295,12 +3295,13 @@
 
 /* Recent Transaction Book Image */
 
+
 .transaction-image {
-  width: 48px;
-  height: 58px;
+  width: 60px;
+  height: 72px;
   flex-shrink: 0;
   overflow: hidden;
-  border-radius: 7px;
+  border-radius: 8px;
   background: #eef2f7;
   border: 1px solid #e5eaf0;
 }
