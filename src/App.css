@@ -3314,4 +3314,263 @@
 }
 
 
+/* Additional book form fields */
+
+.book-form-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.book-description-field {
+  grid-column: 1 / -1;
+}
+
+.book-input-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #dce3ec;
+  border-radius: 9px;
+  background: #fff;
+  color: #172b43;
+  font: inherit;
+  resize: vertical;
+  outline: none;
+}
+
+.book-input-group textarea:focus {
+  border-color: #f28c00;
+  box-shadow: 0 0 0 3px rgba(242, 140, 0, 0.1);
+}
+
+/* View Details button */
+
+.view-book-details-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  background: #f4f7fb;
+  color: #172b43;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.view-book-details-btn:hover {
+  background: #101c2a;
+  color: white;
+  border-color: #101c2a;
+}
+
+/* Book details modal */
+
+.book-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(10, 20, 35, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.book-details-modal {
+  width: 100%;
+  max-width: 760px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: bookModalOpen 0.2s ease;
+}
+
+@keyframes bookModalOpen {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.book-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 26px;
+  border-bottom: 1px solid #e8edf3;
+}
+
+.book-modal-header span {
+  color: #f28c00;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.book-modal-header h2 {
+  margin: 5px 0 0;
+  color: #101c2a;
+  font-size: 22px;
+}
+
+.book-modal-header button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: #f0f3f7;
+  color: #34465d;
+  cursor: pointer;
+}
+
+.book-modal-content {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 26px;
+  padding: 26px;
+}
+
+.book-modal-cover {
+  height: 270px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #eef2f7;
+}
+
+.book-modal-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.book-modal-information {
+  min-width: 0;
+}
+
+.book-modal-category {
+  display: inline-block;
+  padding: 5px 11px;
+  border-radius: 20px;
+  background: #fff2df;
+  color: #bd6a00;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.book-modal-information h3 {
+  margin: 12px 0 7px;
+  color: #101c2a;
+  font-size: 23px;
+}
+
+.book-modal-author {
+  color: #718096;
+  font-size: 14px;
+}
+
+.book-modal-description {
+  margin-top: 20px;
+}
+
+.book-modal-description h4 {
+  margin-bottom: 7px;
+  color: #172b43;
+  font-size: 14px;
+}
+
+.book-modal-description p {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.book-modal-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.book-modal-meta div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.book-modal-meta span {
+  color: #8290a3;
+  font-size: 12px;
+}
+
+.book-modal-meta strong {
+  color: #172b43;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.book-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 26px;
+  border-top: 1px solid #e8edf3;
+}
+
+.book-modal-footer button {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  background: #101c2a;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Responsive modal and forms */
+
+@media (max-width: 600px) {
+  .book-form-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .book-description-field {
+    grid-column: auto;
+  }
+
+  .book-modal-content {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .book-modal-cover {
+    width: 150px;
+    height: 210px;
+    margin: 0 auto;
+  }
+
+  .book-modal-header {
+    padding: 18px;
+  }
+
+  .book-modal-meta {
+    gap: 14px;
+  }
+
+  .book-modal-footer {
+    padding: 14px 18px;
+  }
+}
+
+
+
 
