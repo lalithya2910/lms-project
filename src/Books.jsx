@@ -1,7 +1,7 @@
+
 import { useState } from "react";
 
 function Books() {
-
   const [books, setBooks] = useState([
     {
       id: 1,
@@ -68,29 +68,20 @@ function Books() {
     }
   ]);
 
-
   const [search, setSearch] = useState("");
-
   const [selectedCategory, setSelectedCategory] = useState("All");
-
   const [showForm, setShowForm] = useState(false);
 
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
-
   const [error, setError] = useState("");
 
   const [editId, setEditId] = useState(null);
-
   const [editTitle, setEditTitle] = useState("");
   const [editAuthor, setEditAuthor] = useState("");
   const [editCategory, setEditCategory] = useState("");
-
   const [editError, setEditError] = useState("");
-
-
-  /* Categories */
 
   const categories = [
     "All",
@@ -102,30 +93,32 @@ function Books() {
     "Productivity"
   ];
 
-
-  /* Add Book */
+  const filteredBooks = books
+    .filter((book) =>
+      `${book.title} ${book.author}`.toLowerCase().includes(search.toLowerCase())
+    )
+    .filter((book) =>
+      selectedCategory === "All" || book.category === selectedCategory
+    );
 
   function addBook() {
-
-    if (title.trim() === "") {
+    if (!title.trim()) {
       setError("Book title is required");
       return;
     }
 
-    if (author.trim() === "") {
+    if (!author.trim()) {
       setError("Author is required");
       return;
     }
 
-    if (category.trim() === "") {
+    if (!category.trim()) {
       setError("Category is required");
       return;
     }
 
     const bookExists = books.some(
-      (book) =>
-        book.title.toLowerCase() ===
-        title.trim().toLowerCase()
+      (book) => book.title.toLowerCase() === title.trim().toLowerCase()
     );
 
     if (bookExists) {
@@ -134,7 +127,7 @@ function Books() {
     }
 
     const newBook = {
-      id: books.length + 1,
+      id: Date.now(),
       title: title.trim(),
       author: author.trim(),
       category: category.trim(),
@@ -142,57 +135,37 @@ function Books() {
     };
 
     setBooks([...books, newBook]);
-
     setTitle("");
     setAuthor("");
     setCategory("");
-
     setError("");
     setShowForm(false);
   }
 
-
-  /* Delete Book */
-
   function deleteBook(id) {
-
-    const updatedBooks = books.filter(
-      (book) => book.id !== id
-    );
-
-    setBooks(updatedBooks);
+    setBooks(books.filter((book) => book.id !== id));
   }
 
-
-  /* Start Editing */
-
   function editBook(book) {
-
     setEditId(book.id);
-
     setEditTitle(book.title);
     setEditAuthor(book.author);
     setEditCategory(book.category);
-
     setEditError("");
   }
 
-
-  /* Save Edited Book */
-
   function saveEdit(id) {
-
-    if (editTitle.trim() === "") {
+    if (!editTitle.trim()) {
       setEditError("Book title is required");
       return;
     }
 
-    if (editAuthor.trim() === "") {
+    if (!editAuthor.trim()) {
       setEditError("Author is required");
       return;
     }
 
-    if (editCategory.trim() === "") {
+    if (!editCategory.trim()) {
       setEditError("Category is required");
       return;
     }
@@ -200,8 +173,7 @@ function Books() {
     const bookExists = books.some(
       (book) =>
         book.id !== id &&
-        book.title.toLowerCase() ===
-        editTitle.trim().toLowerCase()
+        book.title.toLowerCase() === editTitle.trim().toLowerCase()
     );
 
     if (bookExists) {
@@ -209,96 +181,96 @@ function Books() {
       return;
     }
 
-    const updatedBooks = books.map(
-      (book) =>
-        book.id === id
-          ? {
-              ...book,
-              title: editTitle.trim(),
-              author: editAuthor.trim(),
-              category: editCategory.trim()
-            }
-          : book
+    const updatedBooks = books.map((book) =>
+      book.id === id
+        ? {
+            ...book,
+            title: editTitle.trim(),
+            author: editAuthor.trim(),
+            category: editCategory.trim()
+          }
+        : book
     );
 
     setBooks(updatedBooks);
-
     setEditId(null);
-
     setEditTitle("");
     setEditAuthor("");
     setEditCategory("");
-
     setEditError("");
   }
-
-
-  /* Cancel Edit */
 
   function cancelEdit() {
-
     setEditId(null);
-
     setEditTitle("");
     setEditAuthor("");
     setEditCategory("");
-
     setEditError("");
   }
-
 
   return (
     <div className="books-page">
 
-      {/* Books Header */}
-
-      <div className="books-header">
-
+      <div className="books-page-header">
         <div>
-
-          <h1>Books</h1>
-
-          <p>
-            Manage all library books
+          <p className="books-eyebrow">LIBRARY COLLECTION</p>
+          <h1>Book Management</h1>
+          <p className="books-subtitle">
+            Organize, manage and explore your library collection.
           </p>
-
         </div>
 
+        <div className="books-total">
+          <div className="books-total-icon">
+            <i className="bi bi-book-half"></i>
+          </div>
+          <div>
+            <span>Total Books</span>
+            <h2>{books.length}</h2>
+          </div>
+        </div>
+      </div>
 
-        {/* Search */}
-
-        <input
-          type="text"
-          placeholder="Search books..."
-          value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
-        />
-
-
-        {/* Add Book Button */}
+      <div className="books-toolbar">
+        <div className="books-search">
+          <i className="bi bi-search"></i>
+          <input
+            type="text"
+            placeholder="Search by book title or author..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          {search && (
+            <button
+              className="clear-search"
+              onClick={() => setSearch("")}
+              aria-label="Clear search"
+            >
+              <i className="bi bi-x-circle"></i>
+            </button>
+          )}
+        </div>
 
         <button
           className="add-book-btn"
           onClick={() => {
-            setShowForm(true);
+            setShowForm(!showForm);
             setError("");
           }}
         >
-          + Add Book
+          <i className={`bi ${showForm ? "bi-x-lg" : "bi-plus-lg"}`}></i>
+          {showForm ? "Close Form" : "Add New Book"}
         </button>
-
       </div>
 
+      <div className="books-category-section">
+        <div className="category-heading">
+          <h3>Browse Categories</h3>
+          <span>{filteredBooks.length} books found</span>
+        </div>
 
-      {/* Category Filter */}
-
-      <div className="category-filter">
-
-        {categories.map(
-          (categoryName) => (
-
+        <div className="category-filter">
+          {categories.map((categoryName) => (
             <button
               key={categoryName}
               className={
@@ -306,192 +278,184 @@ function Books() {
                   ? "category-btn active"
                   : "category-btn"
               }
-              onClick={() =>
-                setSelectedCategory(categoryName)
-              }
+              onClick={() => setSelectedCategory(categoryName)}
             >
               {categoryName}
             </button>
-
-          )
-        )}
-
+          ))}
+        </div>
       </div>
 
-
-      {/* Add Book Form */}
-
       {showForm && (
-
         <div className="book-form">
+          <div className="book-form-heading">
+            <div className="book-form-icon">
+              <i className="bi bi-journal-plus"></i>
+            </div>
+            <div>
+              <h2>Add New Book</h2>
+              <p>Enter the details to add a book to your collection.</p>
+            </div>
+          </div>
 
-          <h2>Add New Book</h2>
-
-          <input
-            type="text"
-            placeholder="Book title"
-            value={title}
-            onChange={(e) =>
-              setTitle(e.target.value)
-            }
-          />
-
-          <input
-            type="text"
-            placeholder="Author"
-            value={author}
-            onChange={(e) =>
-              setAuthor(e.target.value)
-            }
-          />
-
-          <input
-            type="text"
-            placeholder="Category"
-            value={category}
-            onChange={(e) =>
-              setCategory(e.target.value)
-            }
-          />
-
-          {error && (
-            <p className="book-error">
-              {error}
-            </p>
-          )}
-
-          <button onClick={addBook}>
-            Add Book
-          </button>
-
-        </div>
-
-      )}
-
-
-      {/* Books List */}
-
-      <div className="books-list">
-
-        {books
-
-          .filter((book) =>
-            book.title
-              .toLowerCase()
-              .includes(search.toLowerCase())
-          )
-
-          .filter((book) =>
-            selectedCategory === "All"
-              ? true
-              : book.category === selectedCategory
-          )
-
-          .map((book) => (
-
-            <div
-              className="book-card"
-              key={book.id}
-            >
-
-              {editId === book.id ? (
-
-                <>
-                  <h3>Edit Book</h3>
-
-                  <input
-                    type="text"
-                    value={editTitle}
-                    onChange={(e) =>
-                      setEditTitle(e.target.value)
-                    }
-                  />
-
-                  <input
-                    type="text"
-                    value={editAuthor}
-                    onChange={(e) =>
-                      setEditAuthor(e.target.value)
-                    }
-                  />
-
-                  <input
-                    type="text"
-                    value={editCategory}
-                    onChange={(e) =>
-                      setEditCategory(e.target.value)
-                    }
-                  />
-
-                  {editError && (
-                    <p className="book-error">
-                      {editError}
-                    </p>
-                  )}
-
-                  <button
-                    onClick={() =>
-                      saveEdit(book.id)
-                    }
-                  >
-                    Save
-                  </button>
-
-                  <button
-                    onClick={cancelEdit}
-                  >
-                    Cancel
-                  </button>
-                </>
-
-              ) : (
-
-                <>
-
-                  {book.image && (
-                    <img
-                      src={book.image}
-                      alt={book.title}
-                      className="book-image"
-                    />
-                  )}
-
-                  <h3>
-                    {book.title}
-                  </h3>
-
-                  <p>
-                    Author: {book.author}
-                  </p>
-
-                  <p>
-                    Category: {book.category}
-                  </p>
-
-                  <button
-                    onClick={() =>
-                      editBook(book)
-                    }
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      deleteBook(book.id)
-                    }
-                  >
-                    Delete
-                  </button>
-
-                </>
-
-              )}
-
+          <div className="book-form-fields">
+            <div className="book-input-group">
+              <label>Book Title</label>
+              <input
+                type="text"
+                placeholder="Enter book title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </div>
 
-          ))}
+            <div className="book-input-group">
+              <label>Author Name</label>
+              <input
+                type="text"
+                placeholder="Enter author name"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+              />
+            </div>
 
+            <div className="book-input-group">
+              <label>Category</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="">Select category</option>
+                {categories.filter((item) => item !== "All").map((item) => (
+                  <option key={item} value={item}>{item}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {error && <p className="book-error"><i className="bi bi-exclamation-circle"></i> {error}</p>}
+
+          <div className="book-form-actions">
+            <button className="form-cancel-btn" onClick={() => {
+              setShowForm(false);
+              setError("");
+            }}>
+              Cancel
+            </button>
+            <button className="form-submit-btn" onClick={addBook}>
+              <i className="bi bi-plus-lg"></i> Add Book
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="books-grid">
+        {filteredBooks.length > 0 ? (
+          filteredBooks.map((book) => (
+            <div className="book-card" key={book.id}>
+              {editId === book.id ? (
+                <div className="book-edit-form">
+                  <div className="book-edit-heading">
+                    <i className="bi bi-pencil-square"></i>
+                    <h3>Edit Book Details</h3>
+                  </div>
+
+                  <div className="book-input-group">
+                    <label>Book Title</label>
+                    <input
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="book-input-group">
+                    <label>Author Name</label>
+                    <input
+                      value={editAuthor}
+                      onChange={(e) => setEditAuthor(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="book-input-group">
+                    <label>Category</label>
+                    <select
+                      value={editCategory}
+                      onChange={(e) => setEditCategory(e.target.value)}
+                    >
+                      <option value="">Select category</option>
+                      {categories.filter((item) => item !== "All").map((item) => (
+                        <option key={item} value={item}>{item}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {editError && <p className="book-error">{editError}</p>}
+
+                  <div className="book-card-actions">
+                    <button className="save-book-btn" onClick={() => saveEdit(book.id)}>
+                      <i className="bi bi-check-lg"></i> Save Changes
+                    </button>
+                    <button className="cancel-edit-btn" onClick={cancelEdit}>
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="book-cover">
+                    {book.image ? (
+                      <img
+                        src={book.image}
+                        alt={book.title}
+                        className="book-image"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
+                    ) : (
+                      <div className="book-image-placeholder">
+                        <i className="bi bi-book"></i>
+                        <span>BOOKNEST</span>
+                      </div>
+                    )}
+                    <span className="book-category-badge">{book.category}</span>
+                  </div>
+
+                  <div className="book-card-content">
+                    <h3>{book.title}</h3>
+                    <p className="book-author">
+                      <i className="bi bi-person"></i>
+                      {book.author}
+                    </p>
+
+                    <div className="book-card-divider"></div>
+
+                    <div className="book-card-actions">
+                      <button className="edit-book-btn" onClick={() => editBook(book)}>
+                        <i className="bi bi-pencil"></i> Edit
+                      </button>
+                      <button className="delete-book-btn" onClick={() => deleteBook(book.id)}>
+                        <i className="bi bi-trash3"></i> Delete
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          ))
+        ) : (
+          <div className="books-empty">
+            <i className="bi bi-journal-x"></i>
+            <h3>No Books Found</h3>
+            <p>Try changing your search or category filter.</p>
+            <button onClick={() => {
+              setSearch("");
+              setSelectedCategory("All");
+            }}>
+              Clear Filters
+            </button>
+          </div>
+        )}
       </div>
 
     </div>
