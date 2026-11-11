@@ -1,9 +1,43 @@
 
-function Dashboard({ transactions, books, members }) {
+function Dashboard({
+  transactions = [],
+  books = [],
+  members = []
+}) {
 
   // Today's date (time removed)
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+
+  // Book images based on book title
+  const bookImages = {
+    "The Alchemist":
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJjeK7zsJxuwPVEFXr-z2GwXcMAqVtdgdjkVZcVyESOA&s=10",
+
+    "Atomic Habits":
+      "https://jamesclear.com/wp-content/uploads/2026/07/atomic-habits-dots.png",
+
+    "Clean Code":
+      "https://m.media-amazon.com/images/I/71I-zd7XWkL._UF1000,1000_QL80_.jpg",
+
+    "Harry Potter":
+      "https://m.media-amazon.com/images/M/MV5BNTU1MzgyMDMtMzBlZS00YzczLThmYWEtMjU3YmFlOWEyMjE1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+
+    "Rich Dad Poor Dad":
+      "https://www.porchlightbooks.com/cdn/shop/files/9780446677455.jpg?v=1729588472",
+
+    "The Psychology of Money":
+      "https://m.media-amazon.com/images/I/71oAJY1LbcL._AC_UF1000,1000_QL80_.jpg",
+
+    "Ikigai":
+      "https://m.media-amazon.com/images/I/71lJBs5MNlL._AC_UF1000,1000_QL80_.jpg",
+
+    "Deep Work":
+      "https://m.media-amazon.com/images/I/61zt25yYrCL._AC_UF1000,1000_QL80_.jpg",
+
+    "Think and Grow Rich":
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAYJpPTTm-kG3kCXegacJG7EwCUDnEI6VmDJEEf2ABxjbfhf51JK563tg&s=10"
+  };
 
   // Issued books count
   const issuedBooks = transactions.filter(
@@ -73,6 +107,22 @@ function Dashboard({ transactions, books, members }) {
       month: "short",
       year: "numeric"
     });
+  };
+
+  // Get book image
+  const getBookImage = (transaction) => {
+    return (
+      transaction.image ||
+      bookImages[transaction.book] ||
+      "https://placehold.co/60x80/eef2f7/64748b?text=Book"
+    );
+  };
+
+  // Image fallback
+  const handleImageError = (e) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src =
+      "https://placehold.co/60x80/eef2f7/64748b?text=Book";
   };
 
   return (
@@ -175,16 +225,9 @@ function Dashboard({ transactions, books, members }) {
                 <div className="transaction-image">
 
                   <img
-                    src={
-                      transaction.image ||
-                      "https://placehold.co/60x80/eef2f7/64748b?text=Book"
-                    }
+                    src={getBookImage(transaction)}
                     alt={transaction.book || "Book cover"}
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src =
-                        "https://placehold.co/60x80/eef2f7/64748b?text=Book";
-                    }}
+                    onError={handleImageError}
                   />
 
                 </div>
