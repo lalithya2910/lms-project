@@ -430,9 +430,15 @@ function Transaction({ transactions, setTransactions }) {
 
                 <div className="transaction-card-top">
 
-                  <div className="transaction-book-icon">
-                    <i className="bi bi-book"></i>
-                  </div>
+                  <div className="transaction-book-image">
+  <img
+    src={transaction.image}
+    alt={transaction.book}
+    onError={(e) => {
+      e.target.style.display = "none";
+    }}
+  />
+</div>
 
                   <span
                     className={`transaction-status ${
