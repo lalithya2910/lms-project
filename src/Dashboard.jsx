@@ -1,16 +1,27 @@
 
 function Dashboard({ transactions, books, members }) {
 
+  // Today's date (time removed)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // Issued books count
   const issuedBooks = transactions.filter(
     (transaction) => transaction.status === "Issued"
   ).length;
 
-  const overdueBooks = transactions.filter(
-    (transaction) =>
-      transaction.status === "Issued" &&
-      new Date(transaction.dueDate) < new Date()
-  ).length;
+  // Overdue books count
+  const overdueBooks = transactions.filter((transaction) => {
+    if (transaction.status !== "Issued" || !transaction.dueDate) {
+      return false;
+    }
 
+    const dueDate = new Date(`${transaction.dueDate}T00:00:00`);
+
+    return !isNaN(dueDate.getTime()) && dueDate < today;
+  }).length;
+
+  // Dashboard statistics
   const stats = [
     {
       title: "Total Books",
@@ -42,10 +53,27 @@ function Dashboard({ transactions, books, members }) {
     }
   ];
 
-  const recentTransactions = transactions
-    .slice()
+  // Latest 5 transactions
+  const recentTransactions = [...transactions]
     .reverse()
     .slice(0, 5);
+
+  // Date formatting
+  const formatDate = (date) => {
+    if (!date) return "N/A";
+
+    const parsedDate = new Date(`${date}T00:00:00`);
+
+    if (isNaN(parsedDate.getTime())) {
+      return date;
+    }
+
+    return parsedDate.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
+  };
 
   return (
     <div className="dashboard">
@@ -68,7 +96,8 @@ function Dashboard({ transactions, books, members }) {
 
         <div className="dashboard-date">
           <i className="bi bi-calendar3"></i>
-          {new Date().toLocaleDateString("en-IN", {
+
+          {today.toLocaleDateString("en-IN", {
             day: "2-digit",
             month: "short",
             year: "numeric"
@@ -82,9 +111,9 @@ function Dashboard({ transactions, books, members }) {
 
       <div className="stats-container">
 
-        {stats.map((stat, index) => (
+        {stats.map((stat) => (
 
-          <div className="stat-card" key={index}>
+          <div className="stat-card" key={stat.title}>
 
             <div className="stat-top">
 
@@ -134,47 +163,74 @@ function Dashboard({ transactions, books, members }) {
 
           {recentTransactions.length > 0 ? (
 
-            recentTransactions.map((transaction) => (
+            recentTransactions.map((transaction, index) => (
 
               <div
                 className="recent-item"
-                key={transaction.id}
+                key={transaction.id ?? `${transaction.book}-${index}`}
               >
 
-               <div className="transaction-image">
- <img
-    src={
-      transaction.image ||
-      "https://placehold.co/60x80/eef2f7/64748b?text=Book"
-    }
-    alt={transaction.book}
-  />
-</div>
+                {/* BOOK IMAGE */}
+
+                <div className="transaction-image">
+
+                  <img
+                    src={
+                      transaction.image ||
+                      "https://placehold.co/60x80/eef2f7/64748b?text=Book"
+                    }
+                    alt={transaction.book || "Book cover"}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src =
+                        "https://placehold.co/60x80/eef2f7/64748b?text=Book";
+                    }}
+                  />
+
+                </div>
+
+
+                {/* TRANSACTION DETAILS */}
 
                 <div className="transaction-details">
 
-                  <h3>{transaction.book}</h3>
+                  <h3>{transaction.book || "Unknown Book"}</h3>
 
                   <p>
                     <i className="bi bi-person"></i>
-                    {transaction.member}
+                    {" "}{transaction.member || "Unknown Member"}
                   </p>
 
                 </div>
 
+
+                {/* ISSUE DATE */}
+
                 <div className="transaction-date">
 
                   <span>Issue Date</span>
-                  <p>{transaction.date}</p>
+
+                  <p>
+                    {formatDate(transaction.date || transaction.issueDate)}
+                  </p>
 
                 </div>
+
+
+                {/* DUE DATE */}
 
                 <div className="transaction-due">
 
                   <span>Due Date</span>
-                  <p>{transaction.dueDate}</p>
+
+                  <p>
+                    {formatDate(transaction.dueDate)}
+                  </p>
 
                 </div>
+
+
+                {/* STATUS */}
 
                 <span
                   className={
@@ -183,13 +239,17 @@ function Dashboard({ transactions, books, members }) {
                       : "status-returned"
                   }
                 >
-                  <i className={
-                    transaction.status === "Issued"
-                      ? "bi bi-arrow-up-right-circle"
-                      : "bi bi-check-circle"
-                  }></i>
 
-                  {transaction.status}
+                  <i
+                    className={
+                      transaction.status === "Issued"
+                        ? "bi bi-arrow-up-right-circle"
+                        : "bi bi-check-circle"
+                    }
+                  ></i>
+
+                  {" "}{transaction.status}
+
                 </span>
 
               </div>
@@ -199,9 +259,15 @@ function Dashboard({ transactions, books, members }) {
           ) : (
 
             <div className="empty-transactions">
+
               <i className="bi bi-inbox"></i>
+
               <h3>No Transactions Found</h3>
-              <p>Recent book activities will appear here.</p>
+
+              <p>
+                Recent book activities will appear here.
+              </p>
+
             </div>
 
           )}
