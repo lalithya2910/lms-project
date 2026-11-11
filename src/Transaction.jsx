@@ -8,56 +8,56 @@ function Transaction({ transactions, setTransactions }) {
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
 
- 
-const availableBooks = [
-  {
-    id: 1,
-    title: "The Alchemist",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJjeK7zsJxuwPVEFXr-z2GwXcMAqVtdgdjkVZcVyESOA&s=10"
-  },
-  {
-    id: 2,
-    title: "Atomic Habits",
-    image: "https://jamesclear.com/wp-content/uploads/2026/07/atomic-habits-dots.png"
-  },
-  {
-    id: 3,
-    title: "Clean Code",
-    image: "https://m.media-amazon.com/images/I/71I-zd7XWkL._UF1000,1000_QL80_.jpg"
-  },
-  {
-    id: 4,
-    title: "Harry Potter",
-    image: "https://m.media-amazon.com/images/M/MV5BNTU1MzgyMDMtMzBlZS00YzczLThmYWEtMjU3YmFlOWEyMjE1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg"
-  },
-  {
-    id: 5,
-    title: "Rich Dad Poor Dad",
-    image: "https://www.porchlightbooks.com/cdn/shop/files/9780446677455.jpg?v=1729588472"
-  },
-  {
-    id: 6,
-    title: "The Psychology of Money",
-    image: "https://m.media-amazon.com/images/I/71oAJY1LbcL._AC_UF1000,1000_QL80_.jpg"
-  },
-  {
-    id: 7,
-    title: "Ikigai",
-    image: "https://m.media-amazon.com/images/I/71lJBs5MNlL._AC_UF1000,1000_QL80_.jpg"
-  },
-  {
-    id: 8,
-    title: "Deep Work",
-    image: "https://m.media-amazon.com/images/I/61zt25yYrCL._AC_UF1000,1000_QL80_.jpg"
-  },
-  {
-    id: 9,
-    title: "Think and Grow Rich",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAYJpPTTm-kG3kCXegacJG7EwCUDnEI6VmDJEEf2ABxjbfhf51JK563tg&s=10"
-  }
-];
+  // Available books with cover images
+  const availableBooks = [
+    {
+      id: 1,
+      title: "The Alchemist",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJjeK7zsJxuwPVEFXr-z2GwXcMAqVtdgdjkVZcVyESOA&s=10"
+    },
+    {
+      id: 2,
+      title: "Atomic Habits",
+      image: "https://jamesclear.com/wp-content/uploads/2026/07/atomic-habits-dots.png"
+    },
+    {
+      id: 3,
+      title: "Clean Code",
+      image: "https://m.media-amazon.com/images/I/71I-zd7XWkL._UF1000,1000_QL80_.jpg"
+    },
+    {
+      id: 4,
+      title: "Harry Potter",
+      image: "https://m.media-amazon.com/images/M/MV5BNTU1MzgyMDMtMzBlZS00YzczLThmYWEtMjU3YmFlOWEyMjE1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg"
+    },
+    {
+      id: 5,
+      title: "Rich Dad Poor Dad",
+      image: "https://www.porchlightbooks.com/cdn/shop/files/9780446677455.jpg?v=1729588472"
+    },
+    {
+      id: 6,
+      title: "The Psychology of Money",
+      image: "https://m.media-amazon.com/images/I/71oAJY1LbcL._AC_UF1000,1000_QL80_.jpg"
+    },
+    {
+      id: 7,
+      title: "Ikigai",
+      image: "https://m.media-amazon.com/images/I/71lJBs5MNlL._AC_UF1000,1000_QL80_.jpg"
+    },
+    {
+      id: 8,
+      title: "Deep Work",
+      image: "https://m.media-amazon.com/images/I/61zt25yYrCL._AC_UF1000,1000_QL80_.jpg"
+    },
+    {
+      id: 9,
+      title: "Think and Grow Rich",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAYJpPTTm-kG3kCXegacJG7EwCUDnEI6VmDJEEf2ABxjbfhf51JK563tg&s=10"
+    }
+  ];
 
-
+  // Available members
   const availableMembers = [
     "Ambica",
     "Narendra",
@@ -71,26 +71,50 @@ const availableBooks = [
     "Anjali"
   ];
 
+  // Today's date
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  // Check overdue transaction
   function isOverdue(transaction) {
-    if (transaction.status !== "Issued") return false;
+    if (transaction.status !== "Issued" || !transaction.dueDate) {
+      return false;
+    }
 
-    const due = new Date(`${transaction.dueDate}T00:00:00`);
-    return due < today;
+    const dueDate = new Date(`${transaction.dueDate}T00:00:00`);
+
+    return !isNaN(dueDate.getTime()) && dueDate < today;
   }
 
+  // Transaction statistics
   const issuedCount = transactions.filter(
-    (t) => t.status === "Issued"
+    (transaction) => transaction.status === "Issued"
   ).length;
 
   const returnedCount = transactions.filter(
-    (t) => t.status === "Returned"
+    (transaction) => transaction.status === "Returned"
   ).length;
 
   const overdueCount = transactions.filter(isOverdue).length;
 
+  // Format date
+  function formatDate(date) {
+    if (!date) return "N/A";
+
+    const parsedDate = new Date(`${date}T00:00:00`);
+
+    if (isNaN(parsedDate.getTime())) {
+      return date;
+    }
+
+    return parsedDate.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
+  }
+
+  // Add new transaction
   function addTransaction() {
     if (!book) {
       setError("Please select a book");
@@ -102,6 +126,7 @@ const availableBooks = [
       return;
     }
 
+    // Check whether book is already issued
     const alreadyIssued = transactions.some(
       (transaction) =>
         transaction.book === book &&
@@ -113,56 +138,75 @@ const availableBooks = [
       return;
     }
 
+    // Find selected book details
+    const selectedBook = availableBooks.find(
+      (item) => item.title === book
+    );
+
+    if (!selectedBook) {
+      setError("Selected book not found");
+      return;
+    }
+
+    // Generate issue and due dates
     const issueDate = new Date();
     const dueDate = new Date(issueDate);
+
     dueDate.setDate(dueDate.getDate() + 7);
 
-    const formatDate = (date) => {
+    const formatDateForStorage = (date) => {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
+
       return `${year}-${month}-${day}`;
     };
 
-    const selectedBook = availableBooks.find(
-  (item) => item.title === book
-);
+    // Create transaction object
+    const newTransaction = {
+      id: Date.now(),
+      book: selectedBook.title,
+      member,
+      image: selectedBook.image || "",
+      date: formatDateForStorage(issueDate),
+      dueDate: formatDateForStorage(dueDate),
+      status: "Issued"
+    };
 
-const newTransaction = {
-  id: Date.now(),
-  book,
-  member,
-  image: selectedBook.image,
-  date: formatDate(issueDate),
-  dueDate: formatDate(dueDate),
-  status: "Issued"
-};
+    setTransactions((previous) => [
+      ...previous,
+      newTransaction
+    ]);
 
-    setTransactions((previous) => [...previous, newTransaction]);
-
+    // Reset form
     setBook("");
     setMember("");
     setError("");
     setShowForm(false);
   }
 
+  // Return book
   function returnBook(id) {
     setTransactions((previous) =>
       previous.map((transaction) =>
         transaction.id === id
-          ? { ...transaction, status: "Returned" }
+          ? {
+              ...transaction,
+              status: "Returned"
+            }
           : transaction
       )
     );
   }
 
+  // Search transactions
   const filteredTransactions = transactions.filter((transaction) => {
     const searchText = search.toLowerCase();
 
     return (
-      transaction.book.toLowerCase().includes(searchText) ||
-      transaction.member.toLowerCase().includes(searchText) ||
-      transaction.status.toLowerCase().includes(searchText)
+      (transaction.book || "").toLowerCase().includes(searchText) ||
+      (transaction.member || "").toLowerCase().includes(searchText) ||
+      (transaction.status || "").toLowerCase().includes(searchText)
     );
   });
 
@@ -175,7 +219,9 @@ const newTransaction = {
           <span className="transactions-eyebrow">
             LIBRARY MANAGEMENT
           </span>
+
           <h1>Transactions</h1>
+
           <p>Track book issues, returns and due dates.</p>
         </div>
 
@@ -198,6 +244,7 @@ const newTransaction = {
           <div className="transaction-stat-icon total">
             <i className="bi bi-arrow-left-right"></i>
           </div>
+
           <div>
             <span>Total Transactions</span>
             <h2>{transactions.length}</h2>
@@ -208,6 +255,7 @@ const newTransaction = {
           <div className="transaction-stat-icon issued">
             <i className="bi bi-book-half"></i>
           </div>
+
           <div>
             <span>Currently Issued</span>
             <h2>{issuedCount}</h2>
@@ -218,6 +266,7 @@ const newTransaction = {
           <div className="transaction-stat-icon returned">
             <i className="bi bi-check-circle"></i>
           </div>
+
           <div>
             <span>Returned Books</span>
             <h2>{returnedCount}</h2>
@@ -228,6 +277,7 @@ const newTransaction = {
           <div className="transaction-stat-icon overdue">
             <i className="bi bi-clock-history"></i>
           </div>
+
           <div>
             <span>Overdue Books</span>
             <h2>{overdueCount}</h2>
@@ -244,6 +294,7 @@ const newTransaction = {
             <div className="transaction-form-icon">
               <i className="bi bi-journal-plus"></i>
             </div>
+
             <div>
               <h2>Issue a Book</h2>
               <p>Select a book and member to create a transaction.</p>
@@ -254,26 +305,36 @@ const newTransaction = {
 
             <div className="transaction-input-group">
               <label>Select Book</label>
+
               <select
                 value={book}
-                onChange={(e) => setBook(e.target.value)}
+                onChange={(e) => {
+                  setBook(e.target.value);
+                  setError("");
+                }}
               >
                 <option value="">Choose a book</option>
+
                 {availableBooks.map((bookItem) => (
-  <option key={bookItem.id} value={bookItem.title}>
-    {bookItem.title}
-  </option>
-))}
+                  <option key={bookItem.id} value={bookItem.title}>
+                    {bookItem.title}
+                  </option>
+                ))}
               </select>
             </div>
 
             <div className="transaction-input-group">
               <label>Select Member</label>
+
               <select
                 value={member}
-                onChange={(e) => setMember(e.target.value)}
+                onChange={(e) => {
+                  setMember(e.target.value);
+                  setError("");
+                }}
               >
                 <option value="">Choose a member</option>
+
                 {availableMembers.map((memberName) => (
                   <option key={memberName} value={memberName}>
                     {memberName}
@@ -291,15 +352,19 @@ const newTransaction = {
 
           {error && (
             <p className="transaction-error">
-              <i className="bi bi-exclamation-circle"></i> {error}
+              <i className="bi bi-exclamation-circle"></i>
+              {" "}{error}
             </p>
           )}
 
           <div className="transaction-form-actions">
+
             <button
               className="transaction-cancel-btn"
               onClick={() => {
                 setShowForm(false);
+                setBook("");
+                setMember("");
                 setError("");
               }}
             >
@@ -310,8 +375,10 @@ const newTransaction = {
               className="transaction-submit-btn"
               onClick={addTransaction}
             >
-              <i className="bi bi-check-lg"></i> Confirm Issue
+              <i className="bi bi-check-lg"></i>
+              Confirm Issue
             </button>
+
           </div>
 
         </div>
@@ -319,6 +386,7 @@ const newTransaction = {
 
       {/* List Header and Search */}
       <div className="transaction-list-header">
+
         <div>
           <h2>All Transactions</h2>
           <p>Manage your library issue and return records.</p>
@@ -326,6 +394,7 @@ const newTransaction = {
 
         <div className="transaction-search">
           <i className="bi bi-search"></i>
+
           <input
             type="text"
             placeholder="Search book, member or status..."
@@ -342,19 +411,25 @@ const newTransaction = {
             </button>
           )}
         </div>
+
       </div>
 
       {/* Transactions Grid */}
       {filteredTransactions.length > 0 ? (
+
         <div className="transactions-grid">
 
-          {filteredTransactions.map((transaction) => {
+          {filteredTransactions.map((transaction, index) => {
             const overdue = isOverdue(transaction);
 
             return (
-              <div className="transaction-card" key={transaction.id}>
+              <div
+                className="transaction-card"
+                key={transaction.id ?? `${transaction.book}-${index}`}
+              >
 
                 <div className="transaction-card-top">
+
                   <div className="transaction-book-icon">
                     <i className="bi bi-book"></i>
                   </div>
@@ -369,17 +444,19 @@ const newTransaction = {
                     }`}
                   >
                     <span></span>
+
                     {transaction.status === "Returned"
                       ? "Returned"
                       : overdue
                       ? "Overdue"
                       : "Issued"}
                   </span>
+
                 </div>
 
                 <div className="transaction-book-info">
-                  <h3>{transaction.book}</h3>
-                  <p>Transaction ID: #{transaction.id}</p>
+                  <h3>{transaction.book || "Unknown Book"}</h3>
+                  <p>Transaction ID: #{transaction.id ?? "N/A"}</p>
                 </div>
 
                 <div className="transaction-details">
@@ -388,9 +465,10 @@ const newTransaction = {
                     <span className="transaction-detail-icon">
                       <i className="bi bi-person"></i>
                     </span>
+
                     <div>
                       <small>Member</small>
-                      <p>{transaction.member}</p>
+                      <p>{transaction.member || "Unknown Member"}</p>
                     </div>
                   </div>
 
@@ -398,9 +476,10 @@ const newTransaction = {
                     <span className="transaction-detail-icon">
                       <i className="bi bi-calendar-check"></i>
                     </span>
+
                     <div>
                       <small>Issue Date</small>
-                      <p>{transaction.date}</p>
+                      <p>{formatDate(transaction.date || transaction.issueDate)}</p>
                     </div>
                   </div>
 
@@ -408,9 +487,10 @@ const newTransaction = {
                     <span className="transaction-detail-icon">
                       <i className="bi bi-calendar-event"></i>
                     </span>
+
                     <div>
                       <small>Due Date</small>
-                      <p>{transaction.dueDate}</p>
+                      <p>{formatDate(transaction.dueDate)}</p>
                     </div>
                   </div>
 
@@ -420,6 +500,7 @@ const newTransaction = {
                   <button
                     className="return-book-btn"
                     onClick={() => returnBook(transaction.id)}
+                    disabled={transaction.id == null}
                   >
                     <i className="bi bi-arrow-return-left"></i>
                     Return Book
@@ -431,23 +512,31 @@ const newTransaction = {
           })}
 
         </div>
+
       ) : (
+
         <div className="transactions-empty">
+
           <div>
             <i className="bi bi-arrow-left-right"></i>
           </div>
+
           <h3>No transactions found</h3>
+
           <p>
             {search
               ? "Try searching with a different keyword."
               : "Issue a book to create your first transaction."}
           </p>
+
           {search && (
             <button onClick={() => setSearch("")}>
               Clear Search
             </button>
           )}
+
         </div>
+
       )}
 
     </div>
