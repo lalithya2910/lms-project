@@ -1051,3 +1051,236 @@ body {
 }
 
 
+/* ==============================
+   LIBRARY LOGIN PAGE
+============================== */
+
+.login-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 35px;
+  background: linear-gradient(135deg, #07577c, #002c48);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* LOGIN CARD */
+
+.login-card {
+  width: 100%;
+  max-width: 1500px;
+  min-height: 760px;
+  display: grid;
+  grid-template-columns: 1.65fr 1fr;
+  background: #111315;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+/* LEFT IMAGE SECTION */
+
+.login-card::before {
+  content: "";
+  grid-column: 1;
+  grid-row: 1;
+  min-height: 760px;
+  background:
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.85),
+      rgba(0, 0, 0, 0.05)
+    ),
+    url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1600&q=90");
+
+  background-size: cover;
+  background-position: center;
+}
+
+/* FORM CONTENT */
+
+.login-card > h1,
+.login-card > p,
+.login-card > form {
+  grid-column: 2;
+  margin-left: 55px;
+  margin-right: 55px;
+}
+
+/* HEADING */
+
+.login-card > h1 {
+  margin-top: 55px;
+  margin-bottom: 12px;
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+/* ADMIN LOGIN TEXT */
+
+.login-card > p {
+  color: #aaaaaa;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 35px;
+}
+
+/* FORM */
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+/* LABELS */
+
+.login-card form label {
+  color: #e5e5e5;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* INPUTS */
+
+.login-card form input {
+  width: 100%;
+  height: 53px;
+  padding: 0 15px;
+  background: #151719;
+  border: 1px solid #454545;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.login-card form input::placeholder {
+  color: #999999;
+}
+
+.login-card form input:focus {
+  border-color: #ff9200;
+  box-shadow: 0 0 0 2px rgba(255, 146, 0, 0.12);
+}
+
+/* ERROR MESSAGE */
+
+.login-error {
+  color: #ff6565 !important;
+  font-size: 13px !important;
+  margin: 5px 0 !important;
+}
+
+/* LOGIN BUTTON */
+
+.login-card form button {
+  width: 100%;
+  height: 54px;
+  margin-top: 12px;
+  background: #f28c00;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-card form button:hover {
+  background: #ff9f1c;
+  transform: translateY(-2px);
+  box-shadow: 0 7px 18px rgba(242, 140, 0, 0.2);
+}
+
+/* REGISTER LINK */
+
+.login-card > p:last-child {
+  margin-top: 30px;
+  color: #aaaaaa;
+  font-size: 13px;
+}
+
+.login-card > p:last-child a {
+  color: #ff9a18;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+.login-card > p:last-child a:hover {
+  text-decoration: underline;
+}
+
+/* TABLET RESPONSIVE */
+
+@media (max-width: 900px) {
+  .login-page {
+    padding: 20px;
+  }
+
+  .login-card {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .login-card > h1,
+  .login-card > p,
+  .login-card > form {
+    margin-left: 25px;
+    margin-right: 25px;
+  }
+
+  .login-card > h1 {
+    font-size: 27px;
+  }
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 650px) {
+  .login-page {
+    padding: 15px;
+    align-items: flex-start;
+  }
+
+  .login-card {
+    display: flex;
+    flex-direction: column;
+    max-width: 450px;
+    min-height: auto;
+    margin: auto;
+  }
+
+  .login-card::before {
+    min-height: 250px;
+    width: 100%;
+    background-position: center;
+  }
+
+  .login-card > h1 {
+    margin: 30px 25px 10px;
+    font-size: 28px;
+  }
+
+  .login-card > p {
+    margin: 5px 25px 25px;
+  }
+
+  .login-card > form {
+    margin: 0 25px;
+  }
+
+  .login-card > p:last-child {
+    margin: 25px;
+    text-align: center;
+  }
+}
+
+
+
