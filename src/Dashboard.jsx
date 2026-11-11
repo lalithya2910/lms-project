@@ -141,9 +141,15 @@ function Dashboard({ transactions, books, members }) {
                 key={transaction.id}
               >
 
-                <div className="transaction-icon">
-                  <i className="bi bi-book"></i>
-                </div>
+               <div className="transaction-image">
+ <img
+    src={
+      transaction.image ||
+      "https://placehold.co/60x80/eef2f7/64748b?text=Book"
+    }
+    alt={transaction.book}
+  />
+</div>
 
                 <div className="transaction-details">
 
