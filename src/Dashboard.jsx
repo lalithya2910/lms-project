@@ -1,90 +1,174 @@
+
 function Dashboard({ transactions, books, members }) {
 
   const issuedBooks = transactions.filter(
     (transaction) => transaction.status === "Issued"
   ).length;
 
+  const overdueBooks = transactions.filter(
+    (transaction) =>
+      transaction.status === "Issued" &&
+      new Date(transaction.dueDate) < new Date()
+  ).length;
+
+  const stats = [
+    {
+      title: "Total Books",
+      value: books.length,
+      icon: "bi bi-book-half",
+      color: "blue",
+      description: "Books available in library"
+    },
+    {
+      title: "Total Members",
+      value: members.length,
+      icon: "bi bi-people-fill",
+      color: "purple",
+      description: "Registered library members"
+    },
+    {
+      title: "Issued Books",
+      value: issuedBooks,
+      icon: "bi bi-journal-arrow-up",
+      color: "orange",
+      description: "Currently issued books"
+    },
+    {
+      title: "Overdue Books",
+      value: overdueBooks,
+      icon: "bi bi-clock-history",
+      color: "red",
+      description: "Books past their due date"
+    }
+  ];
+
+  const recentTransactions = transactions
+    .slice()
+    .reverse()
+    .slice(0, 5);
+
   return (
     <div className="dashboard">
 
-      {/* Dashboard Header */}
+      {/* DASHBOARD HEADER */}
 
       <div className="dashboard-header">
 
-        <h1>Dashboard</h1>
+        <div>
+          <p className="dashboard-eyebrow">
+            LIBRARY OVERVIEW
+          </p>
 
-        <p>
-          Welcome to the Library Management System
-        </p>
+          <h1>Dashboard</h1>
+
+          <p className="dashboard-welcome">
+            Welcome back! Here's what's happening in your library today.
+          </p>
+        </div>
+
+        <div className="dashboard-date">
+          <i className="bi bi-calendar3"></i>
+          {new Date().toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+          })}
+        </div>
 
       </div>
 
 
-      {/* Dashboard Statistics */}
+      {/* STATISTICS */}
 
       <div className="stats-container">
 
-        <div className="stat-card">
-          <h3>Total Books</h3>
-          <h2>{books.length}</h2>
-        </div>
+        {stats.map((stat, index) => (
 
+          <div className="stat-card" key={index}>
 
-        <div className="stat-card">
-          <h3>Total Members</h3>
-          <h2>{members.length}</h2>
-        </div>
+            <div className="stat-top">
 
+              <div className={`stat-icon ${stat.color}`}>
+                <i className={stat.icon}></i>
+              </div>
 
-        <div className="stat-card">
-          <h3>Issued Books</h3>
-          <h2>{issuedBooks}</h2>
-        </div>
+              <span className="stat-label">
+                {stat.title}
+              </span>
 
+            </div>
 
-        <div className="stat-card">
-          <h3>Overdue Books</h3>
-          <h2>0</h2>
-        </div>
+            <h2>{stat.value}</h2>
+
+            <p>{stat.description}</p>
+
+          </div>
+
+        ))}
 
       </div>
 
 
-      {/* Recent Transactions */}
+      {/* RECENT TRANSACTIONS */}
 
       <div className="recent-section">
 
-        <h2>Recent Transactions</h2>
+        <div className="recent-header">
+
+          <div>
+            <h2>Recent Transactions</h2>
+
+            <p>
+              Latest book issue and return activities
+            </p>
+          </div>
+
+          <span className="recent-count">
+            {transactions.length} Transactions
+          </span>
+
+        </div>
+
 
         <div className="recent-list">
 
-          {transactions
-            .slice()
-            .reverse()
-            .slice(0, 5)
-            .map((transaction) => (
+          {recentTransactions.length > 0 ? (
+
+            recentTransactions.map((transaction) => (
 
               <div
                 className="recent-item"
                 key={transaction.id}
               >
 
-                <div>
+                <div className="transaction-icon">
+                  <i className="bi bi-book"></i>
+                </div>
 
-                  <h3>
-                    {transaction.book}
-                  </h3>
+                <div className="transaction-details">
 
-                  <p>
-                    Member: {transaction.member}
-                  </p>
+                  <h3>{transaction.book}</h3>
 
                   <p>
-                    Date: {transaction.date}
+                    <i className="bi bi-person"></i>
+                    {transaction.member}
                   </p>
 
                 </div>
 
+                <div className="transaction-date">
+
+                  <span>Issue Date</span>
+                  <p>{transaction.date}</p>
+
+                </div>
+
+                <div className="transaction-due">
+
+                  <span>Due Date</span>
+                  <p>{transaction.dueDate}</p>
+
+                </div>
 
                 <span
                   className={
@@ -93,12 +177,28 @@ function Dashboard({ transactions, books, members }) {
                       : "status-returned"
                   }
                 >
+                  <i className={
+                    transaction.status === "Issued"
+                      ? "bi bi-arrow-up-right-circle"
+                      : "bi bi-check-circle"
+                  }></i>
+
                   {transaction.status}
                 </span>
 
               </div>
 
-            ))}
+            ))
+
+          ) : (
+
+            <div className="empty-transactions">
+              <i className="bi bi-inbox"></i>
+              <h3>No Transactions Found</h3>
+              <p>Recent book activities will appear here.</p>
+            </div>
+
+          )}
 
         </div>
 
