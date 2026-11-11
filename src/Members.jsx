@@ -324,8 +324,11 @@ function Members() {
                 <>
                   <div className="member-card-top">
                     <div className="member-avatar">
+  <div className="member-avatar">
   <img
-    src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(member.name.trim().toLowerCase())}`}
+    src={`https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(
+      member.name.trim().toLowerCase()
+    )}&backgroundColor=dbeafe,c7d2fe,e0e7ff`}
     alt={`${member.name} avatar`}
     loading="lazy"
   />
