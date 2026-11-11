@@ -430,10 +430,17 @@ function Transaction({ transactions, setTransactions }) {
 
                 <div className="transaction-card-top">
 
-                  <div className="transaction-book-image">
+                  
+<div className="transaction-book-image">
   <img
-    src={transaction.image}
-    alt={transaction.book}
+    src={
+      transaction.image ||
+      availableBooks.find(
+        (item) => item.title === transaction.book
+      )?.image ||
+      ""
+    }
+    alt={transaction.book || "Book cover"}
     onError={(e) => {
       e.target.style.display = "none";
     }}
