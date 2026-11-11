@@ -3293,5 +3293,24 @@
   }
 }
 
+/* Recent Transaction Book Image */
+
+.transaction-image {
+  width: 48px;
+  height: 58px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 7px;
+  background: #eef2f7;
+  border: 1px solid #e5eaf0;
+}
+
+.transaction-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 
 
