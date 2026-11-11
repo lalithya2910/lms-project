@@ -323,7 +323,7 @@ function Members() {
               ) : (
                 <>
                   <div className="member-card-top">
-                    <div className="member-avatar">
+                    
   <div className="member-avatar">
   <i className="bi bi-person-fill"></i>
 </div>
