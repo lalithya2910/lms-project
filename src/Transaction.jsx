@@ -8,17 +8,55 @@ function Transaction({ transactions, setTransactions }) {
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
 
-  const availableBooks = [
-    "The Alchemist",
-    "Atomic Habits",
-    "Clean Code",
-    "Harry Potter",
-    "Rich Dad Poor Dad",
-    "The Psychology of Money",
-    "Ikigai",
-    "Deep Work",
-    "Think and Grow Rich"
-  ];
+ 
+const availableBooks = [
+  {
+    id: 1,
+    title: "The Alchemist",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJjeK7zsJxuwPVEFXr-z2GwXcMAqVtdgdjkVZcVyESOA&s=10"
+  },
+  {
+    id: 2,
+    title: "Atomic Habits",
+    image: "https://jamesclear.com/wp-content/uploads/2026/07/atomic-habits-dots.png"
+  },
+  {
+    id: 3,
+    title: "Clean Code",
+    image: "https://m.media-amazon.com/images/I/71I-zd7XWkL._UF1000,1000_QL80_.jpg"
+  },
+  {
+    id: 4,
+    title: "Harry Potter",
+    image: "https://m.media-amazon.com/images/M/MV5BNTU1MzgyMDMtMzBlZS00YzczLThmYWEtMjU3YmFlOWEyMjE1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg"
+  },
+  {
+    id: 5,
+    title: "Rich Dad Poor Dad",
+    image: "https://www.porchlightbooks.com/cdn/shop/files/9780446677455.jpg?v=1729588472"
+  },
+  {
+    id: 6,
+    title: "The Psychology of Money",
+    image: "https://m.media-amazon.com/images/I/71oAJY1LbcL._AC_UF1000,1000_QL80_.jpg"
+  },
+  {
+    id: 7,
+    title: "Ikigai",
+    image: "https://m.media-amazon.com/images/I/71lJBs5MNlL._AC_UF1000,1000_QL80_.jpg"
+  },
+  {
+    id: 8,
+    title: "Deep Work",
+    image: "https://m.media-amazon.com/images/I/61zt25yYrCL._AC_UF1000,1000_QL80_.jpg"
+  },
+  {
+    id: 9,
+    title: "Think and Grow Rich",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAYJpPTTm-kG3kCXegacJG7EwCUDnEI6VmDJEEf2ABxjbfhf51JK563tg&s=10"
+  }
+];
+
 
   const availableMembers = [
     "Ambica",
